@@ -1,32 +1,29 @@
 # Report 1 Page – FIT4012 Lab 1
 
 ## 1. Mục tiêu
-Bài lab yêu cầu thực hiện các chức năng sau:
-- Tính entropy của một chuỗi ký tự.
-- Tính độ dư thừa thông tin (redundancy) dựa trên entropy.
-- Tìm nghịch đảo modulo bằng thuật toán Euclid mở rộng.
-- Chạy thử và ghi lại kết quả.
+Tóm tắt ngắn gọn mục tiêu của bài lab.
+Cài đặt và hiểu ý nghĩa của thuật toán tính Entropy/Redundancy để đánh giá lượng thông tin và độ dư thừa. Thực hành áp dụng thuật toán Euclid mở rộng để lập trình tìm nghịch đảo modulo trong C++, phục vụ làm nền tảng cho các hệ mật mã.
 
 ## 2. Cách làm
-- Đọc lại mã nguồn mẫu `entropy_redundancy.cpp` để hiểu cách tính entropy.
-- Bổ sung hàm `calculate_redundancy()` theo công thức `R = log2(N) - H(X)` với N là kích thước bảng chữ cái.
-- Hoàn thiện hàm `mod_inverse()` sử dụng `extended_euclid()` để tính nghịch đảo modulo.
-- Biên dịch và kiểm tra kết quả với các test case mẫu.
+- Đọc hiểu chương trình entropy mẫu.
+- Bổ sung hàm tính redundancy.
+- Hoàn thiện hàm mod_inverse().
+- Chạy thử trên nhiều test case.
 
 ## 3. Kết quả chính
 ### 3.1 Entropy và redundancy
 | Input | Entropy | Redundancy | Nhận xét |
-|---|---:|---:|---|
-| aaaa | 0 | 8 | Chuỗi đồng nhất, entropy thấp nhất, redundancy cao nhất |
-| abcd | 2 | 6 | Tất cả ký tự xuất hiện đều nhau, entropy trung bình |
-| hello world | 2.845 | 5.155 | Chuỗi có độ tự nhiên cao hơn, entropy lớn hơn và redundancy thấp hơn |
+|---|---|---|---|
+| aaaa | 0 | 8 | Chuỗi chỉ có 1 loại ký tự nên hoàn toàn có thể đoán trước (entropy = 0), độ dư thừa đạt tối đa. |
+| abcd | 2 | 6 | Bốn ký tự phân bố đều (mỗi ký tự 25%), độ ngẫu nhiên tăng lên so với `aaaa` nên dư thừa giảm. |
+| hello world | 2.84535 | 5.15465 | Phân bố phức tạp hơn với các khoảng trắng và ký tự lặp lại (l, o), phản ánh đúng đặc tính của ngôn ngữ tự nhiên. |
 
 ### 3.2 Modulo inverse
 | a | m | Kết quả mong đợi | Kết quả chương trình |
-|---:|---:|---|---|
+|---:|---:|---:|---|
 | 3 | 7 | 5 | 5 |
 | 10 | 17 | 12 | 12 |
-| 6 | 9 | Không tồn tại | Không tồn tại |
+| 6 | 9 | Không tồn tại | Khong ton tai |
 
 ## 4. Kết luận
-Tôi đã học được cách tính entropy của chuỗi ký tự và cách chuyển đổi thông tin thành độ dư thừa bằng công thức `log2(N) - H(X)`. Việc cài đặt nghịch đảo modulo giúp tôi hiểu rõ hơn về thuật toán Euclid mở rộng và điều kiện tồn tại nghịch đảo. Khó khăn lớn nhất là đảm bảo kết quả modulo dương sau khi tính x từ Euclid mở rộng, nhưng đã giải quyết được bằng cách chuẩn hóa về phạm vi `[0, m-1]`.
+Bài lab giúp em củng cố kiến thức vững chắc về lý thuyết thông tin và số học module. Khó khăn lớn nhất là việc xử lý giá trị âm khi trả về từ thuật toán Euclid mở rộng để đưa về đúng khoảng [0, m-1]. Việc đối chiếu giữa tính toán lý thuyết và code chạy thực tế giúp em hiểu rất sâu bản chất của hai khái niệm này trong an toàn bảo mật thông tin.
