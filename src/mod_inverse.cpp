@@ -1,56 +1,82 @@
 #include <iostream>
+
 using namespace std;
 
-// Giữ nguyên gcd
-int gcd(int a, int b) {
-    if (b == 0) return a;
-    return gcd(b, a % b);
+int gcd(int a, int b)
+{
+    if (a < 0)
+        a = -a;
+    if (b < 0)
+        b = -b;
+    while (b != 0)
+    {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
 }
 
-// Giữ nguyên Euclid mở rộng
-int extended_euclid(int a, int b, int &x, int &y) {
-    if (b == 0) {
+int extended_euclid(int a, int b, int &x, int &y)
+{
+    if (b == 0)
+    {
         x = 1;
         y = 0;
         return a;
     }
 
-    int x1, y1;
-    int d = extended_euclid(b, a % b, x1, y1);
-
+    int x1 = 0, y1 = 0;
+    int g = extended_euclid(b, a % b, x1, y1);
     x = y1;
     y = x1 - (a / b) * y1;
-
-    return d;
+    return g;
 }
 
-// ✅ Q3: hoàn thiện hàm này
-int mod_inverse(int a, int m) {
-    int x, y;
-
-    int g = extended_euclid(a, m, x, y);
-
-    // Không tồn tại
-    if (g != 1) {
-        return -1;
+int mod_inverse(int a, int m)
+{
+    int result = -1;
+    if (m <= 0)
+    {
+        return result;
     }
 
-    // Đảm bảo kết quả dương
-    return (x % m + m) % m;
+    a %= m;
+    if (a < 0)
+    {
+        a += m;
+    }
+
+    int x = 0, y = 0;
+    int g = extended_euclid(a, m, x, y);
+    if (g != 1)
+    {
+        return result;
+    }
+
+    int inv = x % m;
+    if (inv < 0)
+    {
+        inv += m;
+    }
+    return inv;
 }
 
-int main() {
-    int a, m;
-    cout << "Nhap a va m: ";
+int main()
+{
+    int a = 0, m = 0;
+    cout << "Nhap a, m: ";
     cin >> a >> m;
 
-    int result = mod_inverse(a, m);
-
-    if (result == -1) {
-        cout << "Khong ton tai nghich dao modulo" << endl;
-    } else {
-        cout << "Nghich dao modulo: " << result << endl;
+    if (gcd(a, m) != 1)
+    {
+        cout << "Khong ton tai nghich dao modulo vi gcd(a, m) != 1.\n";
+        return 0;
     }
 
+    int inv = mod_inverse(a, m);
+    cout << "Nghich dao cua " << a << " mod " << m << " la: " << inv << '\n';
+    cout << "Kiem tra: " << a << " * " << inv << " % " << m
+         << " = " << (1LL * a * inv % m) << '\n';
     return 0;
 }

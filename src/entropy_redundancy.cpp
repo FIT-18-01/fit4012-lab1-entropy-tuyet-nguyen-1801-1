@@ -1,56 +1,47 @@
+#include <cmath>
 #include <iostream>
+#include <map>
+#include <string>
+
 using namespace std;
 
-// gcd
-int gcd(int a, int b) {
-    if (b == 0) return a;
-    return gcd(b, a % b);
-}
-
-// Euclid mở rộng
-int extended_euclid(int a, int b, int &x, int &y) {
-    if (b == 0) {
-        x = 1;
-        y = 0;
-        return a;
+double calculate_entropy(const string &text) {
+    if (text.empty()) {
+        return 0.0;
     }
 
-    int x1, y1;
-    int g = extended_euclid(b, a % b, x1, y1);
-
-    x = y1;
-    y = x1 - (a / b) * y1;
-
-    return g;
-}
-
-// ✅ HÀM CHUẨN CHO AUTOGRADER
-int mod_inverse(int a, int m) {
-    int x, y;
-
-    int g = extended_euclid(a, m, x, y);
-
-    if (g != 1) {
-        return -1;
+    map<char, int> freq;
+    for (char c : text) {
+        freq[c]++;
     }
 
-    // đảm bảo kết quả dương
-    x = x % m;
-    if (x < 0) x += m;
+    double entropy = 0.0;
+    for (const auto &pair : freq) {
+        double p = static_cast<double>(pair.second) / text.size();
+        entropy -= p * log2(p);
+    }
+    return entropy;
+}
 
-    return x;
+double calculate_redundancy(const string &text, int alphabet_size = 256) {
+    if (text.empty()) {
+        return 0.0;
+    }
+
+    double entropy = calculate_entropy(text);
+    double max_entropy = log2(static_cast<double>(alphabet_size));
+    return max_entropy - entropy;
 }
 
 int main() {
-    int a, m;
-    cin >> a >> m;
+    string input;
+    cout << "Enter a string of characters: ";
+    getline(cin, input);
 
-    int result = mod_inverse(a, m);
+    double entropy = calculate_entropy(input);
+    double redundancy = calculate_redundancy(input);
 
-    if (result == -1)
-        cout << -1;
-    else
-        cout << result;
-
+    cout << "Entropy: " << entropy << '\n';
+    cout << "Redundancy: " << redundancy << '\n';
     return 0;
 }
